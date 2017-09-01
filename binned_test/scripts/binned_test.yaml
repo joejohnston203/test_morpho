@@ -1,0 +1,169 @@
+# This is a testing script which is supposed to make a linear fit.
+morpho:
+  do_preprocessing: False
+  do_stan: True
+  do_postprocessing: False
+  do_plots: True
+stan:
+  # Name of the model
+  name: "binned_test"
+  # Model, associated functions, cache folder
+  model:
+    file: "./binned_test/models/binned_test.stan"
+    function_file:
+      - name: "shapes"
+        file: "./binned_test/functions/shapes.functions"
+    cache: "./binned_test/cache"
+#  # Input data
+  data:
+    files:
+      - name: "./binned_test/data/shape1.root"
+        format: "root"
+        tree: "shape1"
+        branches:
+          - name: "y"
+            stan_alias: "shape1"
+      - name: "./binned_test/data/shapes.data"
+        format: "R"
+      - name: "./binned_test/data/fake_data.data"
+        format: "R"
+      - name: "./binned_test/data/params.data"
+        format: "R"
+    parameters:
+      - nBins: 10
+##  # Run parameters
+  run:
+    algorithm: "NUTS"
+    iter: 4000
+    warmup: 1000
+    chain: 1
+    n_jobs: 1
+#    init:
+#       - sig1 : 2.0
+#         sig2 : 1.0
+#         sig3 : 1.0
+#         sig4 : 1.0
+# Output destination
+  output:
+    name: "./binned_test/results/morpho_linear_fit"
+    format: "root"
+    tree: "binned_test"
+    inc_warmup: False
+    branches:
+      - variable: "sig1"
+        root_alias: "sig1"
+      - variable: "sig2"
+        root_alias: "sig2"
+      - variable: "sig3"
+        root_alias: "sig3"
+      - variable: "sig4"
+        root_alias: "sig4"
+      - variable: "lp_prob"
+        root_alias: "LogLikelihood"
+      - variable: "divergent__"
+        root_alias: "divergence"
+      - variable: "energy__"
+        root_alias: "energy"
+      - variable: "delta_energy__"
+        root_alias: "delta_energy"
+#postprocessing:
+#  which_pp:
+#    method_name: "data_reducer"
+#    module_name: "data_reducer",
+#    which_spectrum: ["frequency","time","KE"],
+#    Poisson_redistribution: True,
+#    input_file_name" : "./tritium_model/results/tritium_generator.root",
+#    input_file_format" : "root",
+#    input_tree": "stan_MC",
+#    minKE":18500.,
+#    maxKE":18600.,
+#    nBinHisto":100,
+#    output_file_name" : "./tritium_model/results/tritium_generator_reduced_fake.root",
+#        "output_file_format": "root",
+#        "output_freq_spectrum_tree": "spectrum",
+#        "output_KE_spectrum_tree": "spectrumKE",
+#        "output_time_spectrum_tree": "time",
+#        "additional_file_name" : "./tritium_model/results/tritium_additionalData.out",
+#         }
+#       ]
+#      },
+
+# plot to do
+plot:
+  which_plot:
+    - method_name: histo
+      module_name: histo
+      title: "histo"
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      output_path: ./binned_test/results/
+      data:
+        - sig1
+    - method_name: histo
+      module_name: histo
+      title: "histo"
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      output_path: ./binned_test/results/
+      data:
+        - sig2
+    - method_name: histo
+      module_name: histo
+      title: "histo"
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      output_path: ./binned_test/results/
+      data:
+        - sig3
+    - method_name: histo
+      module_name: histo
+      title: "histo"
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      output_path: ./binned_test/results/
+      data:
+        - sig4
+    - method_name: histo2D_divergence
+      module_name: histo
+      title: "histo"
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      output_path: ./binned_test/results/
+      data:
+        - sig1
+        - sig2
+      color0: "kBlack"
+      color1: "kRed"
+    - method_name: aposteriori_distribution
+      module_name: histo
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      root_plot_option: "cont"
+      output_path: ./binned_test/results/
+      title: aposteriori_binned_test
+      output_format: pdf
+      output_width: 12000
+      output_height: 11000
+      data:
+        - sig1
+        - sig2
+        - sig3
+        - sig4
+    - method_name: correlation_factors
+      module_name: histo
+      input_file_name : "./binned_test/results/morpho_linear_fit.root"
+      input_tree: "binned_test"
+      output_path: ./binned_test/results/
+      title: corr_factors_binned_test
+      output_format: pdf
+      output_width: 12000
+      output_height: 12000
+#      left_margin: 0.1
+#      right_margin: 0.2
+#      bottom_margin: 0.1
+#      top_margin: 0.0
+      data:
+        - sig1
+        - sig2
+        - sig3
+        - sig4

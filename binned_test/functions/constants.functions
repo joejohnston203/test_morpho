@@ -1,0 +1,1 @@
+real c() { return  299792458.;} // Speed of light in m/s

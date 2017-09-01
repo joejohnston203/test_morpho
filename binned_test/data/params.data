@@ -1,0 +1,15 @@
+Nsignals <- 4
+signalsLen <- 2
+boundsLen <- 2
+
+signals <- c(2.0,0.5)
+bounds <- c(0.0, 100.0)
+
+signals <- c(5.0, 0.1)
+bounds <- c(0.0, 100.0)
+
+bounds <- c(0.0, 100.0)
+signals <- c(10.0, 2.0)
+
+signals <- c(20.0, 5.0)
+bounds <- c(0.0, 100.0)
